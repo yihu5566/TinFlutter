@@ -64,6 +64,15 @@ android {
             outputFileName = "flutter${variant.flavorName}_${variant.buildType.name}_${variant.versionName}.apk"
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17  // 原为1.8，改为17
+        targetCompatibility JavaVersion.VERSION_17  // 原为1.8，改为17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'  // 原为17，确保与上面一致（若之前是其他版本也统一为17）
+    }
 }
 
 flutter {
