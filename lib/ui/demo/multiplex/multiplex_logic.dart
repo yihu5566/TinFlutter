@@ -25,7 +25,7 @@ class MultiplexLogic extends GetxController {
     subscription?.cancel();
   }
 
-  void increase() => state.count.value+=50;
+  void increase() => state.count.value+=20;
 
 
 }

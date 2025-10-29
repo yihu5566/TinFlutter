@@ -1,12 +1,10 @@
 import 'dart:async';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tin_flutter/app/global.dart';
 import 'package:tin_flutter/app/res/intl.dart';
-import 'package:tin_flutter/generated/gen/colors.gen.dart';
-import '../../../generated/gen/assets.gen.dart';
 import 'multiplex_logic.dart';
 import 'multiplex_state.dart';
 
@@ -19,65 +17,80 @@ class _MultiplexPageState extends State<MultiplexPage>
     with SingleTickerProviderStateMixin {
   final logic = Get.find<MultiplexLogic>();
   final MultiplexState state = Get.find<MultiplexLogic>().state;
+  late EasyRefreshController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: EasyRefresh.builder(
-        builder: (context, physics, header, footer) {
-          return CustomScrollView(
-            physics: physics,
-            slivers: [
-              SliverAppBar(
-                title: Text(Intl().multiple),
-                pinned: true,
-              ),
-              header as Widget,
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  SizedBox(
-                    height: 150.h,
-                    child: PageView(children: getBannerWidget()),
+      body: EasyRefresh(
+        controller: _controller,
+        header: const ClassicHeader(),
+        footer: const ClassicFooter(),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text(Intl().multiple),
+              pinned: true,
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                SizedBox(
+                  height: 150.h,
+                  child: PageView(children: getBannerWidget()),
+                ),
+                buildGridView(context),
+              ]),
+            ),
+            Obx(() => SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    showToast(Intl().sayHello);
+                  },
+                  child: Card(
+                    child: new Container(
+                      height: 60.h,
+                      padding: EdgeInsets.only(left: 20.r),
+                      alignment: Alignment.center,
+                      child: new Text(
+                        "Item $index",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                  buildGridView(context),
-                ]),
-              ),
-              Obx( ()=> SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          showToast(Intl().sayHello);
-                        },
-                        child: Card(
-                          child: new Container(
-                            height: 60.h,
-                            padding: EdgeInsets.only(left: 20.r),
-                            alignment: Alignment.center,
-                            child: new Text("Item $index",textAlign: TextAlign.center,),
-                          ),
-                        ),
-                      );
-                    }, childCount: state.count.value),
-                  )
-              ),
-              footer as Widget,
-            ],
-          );
-        },
+                );
+              }, childCount: state.count.value),
+            )),
+          ],
+        ),
         onRefresh: () async {
-          await Future.delayed(Duration(microseconds: 100), () {
+          await Future.delayed(Duration(seconds:3), () {
             if (mounted) {
               ///此state对象当前在树中
-              state.count.value=20;
+              state.count.value = 20;
             }
+
           });
+          _controller.finishRefresh();
+          _controller.resetFooter();
         },
         onLoad: () async {
-          await Future.delayed(Duration(microseconds: 100), () {
+          await Future.delayed(Duration(seconds: 3), () {
             if (mounted) {
               logic.increase();
             }
           });
+          _controller.finishLoad(
+              state.count.value >= 200 ? IndicatorResult.noMore : IndicatorResult.success);
         },
       ),
     );
@@ -111,7 +124,7 @@ class _MultiplexPageState extends State<MultiplexPage>
 
   ///构建横纵列表
   Widget buildGridView(BuildContext context) {
-    List<ActionItem> items=[
+    List<ActionItem> items = [
       ActionItem(Icons.ac_unit, Intl().ac_unit),
       ActionItem(Icons.access_alarm, Intl().access_alarm),
       ActionItem(Icons.accessibility, Intl().accessibility),
@@ -130,17 +143,13 @@ class _MultiplexPageState extends State<MultiplexPage>
       itemBuilder: (context, index) {
         var action = items[index];
         return GestureDetector(
-          onTap: () {
-            showToast(Intl().sayHello);
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(action.iconData),
-              Text(action.title)
-            ],
-          )
-        );
+            onTap: () {
+              showToast(Intl().sayHello);
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Icon(action.iconData), Text(action.title)],
+            ));
       },
       itemCount: items.length,
     );
@@ -150,5 +159,6 @@ class _MultiplexPageState extends State<MultiplexPage>
 class ActionItem {
   final String title;
   final IconData iconData;
-  const ActionItem(this.iconData,this.title);
+
+  const ActionItem(this.iconData, this.title);
 }
