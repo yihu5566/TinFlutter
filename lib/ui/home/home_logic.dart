@@ -1,13 +1,11 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tin_flutter/app/global.dart';
-import 'package:tin_flutter/app/res/intl.dart';
-import 'main_state.dart';
+import 'package:tin_flutter/ui/home/home_state.dart';
 
-class MainLogic extends GetxController {
-  final state = MainState();
+class HomeLogic extends GetxController {
+  final state = HomeState();
 
   @override
   void onReady() {
@@ -21,6 +19,7 @@ class MainLogic extends GetxController {
     super.onClose();
   }
 
+  ///权限处理
   Future<void> checkPermission(BuildContext context) async {
     ///android权限申请需要在AndroidManifest.xml里添加对应的权限声明
     ///iOS
@@ -30,7 +29,8 @@ class MainLogic extends GetxController {
       Permission.storage,
     ].request();
     statuses.forEach((key, value) {
-      if(value.isDenied){///被拒绝了
+      if (value.isDenied) {
+        ///被拒绝了
         showToast('permissionDenied'.tr);
         return;
       }
@@ -39,10 +39,10 @@ class MainLogic extends GetxController {
 
   changeLanguage() {
     var locale = Get.locale;
-    if(locale?.languageCode == 'cn'){
-      Get.updateLocale(Locale('en','EN'));
+    if (locale?.languageCode == 'cn') {
+      Get.updateLocale(Locale('en', 'EN'));
     } else {
-      Get.updateLocale(Locale('cn','ZH'));
+      Get.updateLocale(Locale('cn', 'ZH'));
     }
     // for (var localeFile in S.delegate.supportedLocales) {
     //   print("语言切换${locale.toString()}--${localeFile.toString()}");
@@ -53,6 +53,4 @@ class MainLogic extends GetxController {
     //   }
     // }
   }
-
-
 }

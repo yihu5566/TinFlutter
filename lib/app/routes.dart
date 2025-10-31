@@ -4,8 +4,6 @@ import 'package:tin_flutter/ui/demo/connect/connect_binding.dart';
 import 'package:tin_flutter/ui/demo/connect/connect_page.dart';
 import 'package:tin_flutter/ui/demo/count/count_binding.dart';
 import 'package:tin_flutter/ui/demo/count/count_page.dart';
-import 'package:tin_flutter/ui/demo/main/main_binding.dart';
-import 'package:tin_flutter/ui/demo/main/main_page.dart';
 import 'package:tin_flutter/ui/demo/multiplex/multiplex_binding.dart';
 import 'package:tin_flutter/ui/demo/multiplex/multiplex_page.dart';
 import 'package:tin_flutter/ui/demo/rx_dart/rx_dart_binding.dart';
@@ -14,6 +12,8 @@ import 'package:tin_flutter/ui/demo/storage/storage_binding.dart';
 import 'package:tin_flutter/ui/demo/storage/storage_page.dart';
 import 'package:tin_flutter/ui/demo/web/web_binding.dart';
 import 'package:tin_flutter/ui/demo/web/web_page.dart';
+import 'package:tin_flutter/ui/main/main_binding.dart';
+import 'package:tin_flutter/ui/main/main_page.dart';
 
 class Routes {
   static final String main = "/";

@@ -5,7 +5,7 @@ import 'package:tin_flutter/app/routes.dart';
 import 'package:tin_flutter/app/global.dart';
 import 'package:tin_flutter/ui/bean/event_task_bean.dart';
 
-import 'main_logic.dart';
+import '../main/main_logic.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);

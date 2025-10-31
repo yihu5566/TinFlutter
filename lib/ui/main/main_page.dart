@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tin_flutter/app/res/intl.dart';
 import '../mine/mine_page.dart';
-import 'dynamic_page.dart';
-import 'home_page.dart';
+import '../home/home_page.dart';
 import 'main_logic.dart';
 import 'main_state.dart';
 
@@ -17,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   final logic = Get.find<MainLogic>();
   final MainState state = Get.find<MainLogic>().state;
   PageController? _pageConIntloller;
-  List<Widget> pages = [HomePage(), DynamicPage(), MinePage()];
+  List<Widget> pages = [HomePage(), MinePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +34,9 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBar(
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: Intl().home),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.dynamic_form), label: Intl().activity
-              ),
+              // BottomNavigationBarItem(
+              //     icon: Icon(Icons.dynamic_form), label: Intl().activity
+              // ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.supervisor_account), label: Intl().other
               ),
